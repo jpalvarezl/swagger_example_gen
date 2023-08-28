@@ -1,0 +1,10 @@
+[package]
+name = "azure_openai_example_gen"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+anyhow = "1.0"
+hyper = "0.14"
+serde = "1.0"
+dotenv = "0.15"
