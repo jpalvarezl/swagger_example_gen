@@ -1,9 +1,13 @@
-use reqwest::{Client, Method};
 use anyhow::Result;
+use azure_core::{
+    headers::{ACCEPT, AUTHORIZATION, CONTENT_TYPE, USER_AGENT},
+    new_http_client, HttpClient, Method, Request, Url,
+};
+use std::sync::Arc;
 
-pub struct HttpClient  {
-    http_client: Client,
-    auth_info: AuthInfo
+pub struct OpenAIClient {
+    http_client: Arc<dyn HttpClient>,
+    auth_info: AuthInfo,
 }
 
 pub struct AuthInfo {
@@ -11,31 +15,41 @@ pub struct AuthInfo {
     pub key: String,
 }
 
-impl HttpClient {
-
+impl OpenAIClient {
     pub fn new(auth_info: AuthInfo) -> Self {
         Self {
-            http_client: Client::new(),
-            auth_info
+            http_client: new_http_client(),
+            auth_info,
         }
     }
 
-    pub async fn post(&self, path: &str, body: &str) -> Result<String> {
+    pub async fn post(&self, path: &str, body: String) -> Result<String> {
         let uri = format!("{}/{}", &self.auth_info.endpoint, path);
-        let request = self.new_request(&uri, Method::POST)
-            .body(String::from(body));
+        let mut request = self.new_request(&uri, Method::Post);
+        request.set_body(body);
 
-        let response = request.send().await?;
+        let response = (&self.http_client.as_ref())
+            .execute_request(&request)
+            .await?;
 
-        return Ok(response.text().await?);
+        return Ok(response.into_body().collect_string().await?);
     }
 
-    fn new_request(&self, url: &str, method: Method) -> reqwest::RequestBuilder {
-        (&self.http_client).request(method , url)
-            .header("Accept", "application/json")
-            .header("Authorization", &self.auth_info.key)
-            .header("User-Agent", "rust_example_gen_tool")
-            .header("Content-Type", "application/json")
+    fn new_request(&self, url: &str, method: Method) -> Request {
+        let request = {
+            let mut request = Request::new(
+                Url::parse(url).expect(&format!("Failed to parse URL: {}", url)),
+                method,
+            );
 
+            request.insert_header(ACCEPT, "application/json");
+            request.insert_header(AUTHORIZATION, format!("Bearer {}", &self.auth_info.key));
+            request.insert_header(USER_AGENT, "rust_example_gen_tool");
+            request.insert_header(CONTENT_TYPE, "application/json");
+
+            request
+        };
+
+        request
     }
 }
