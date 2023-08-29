@@ -1,15 +1,19 @@
 use anyhow::Result;
 use azure_core::{
-    headers::{ACCEPT, AUTHORIZATION, CONTENT_TYPE, USER_AGENT},
+    headers::{ACCEPT, CONTENT_TYPE, USER_AGENT},
     new_http_client, HttpClient, Method, Request, Url,
 };
 use std::sync::Arc;
+
+//  eventual TODO: support for AAD
+// mod credential_manager;
 
 pub struct OpenAIClient {
     http_client: Arc<dyn HttpClient>,
     auth_info: AuthInfo,
 }
 
+#[derive(Debug)]
 pub struct AuthInfo {
     pub endpoint: String,
     pub key: String,
@@ -43,7 +47,7 @@ impl OpenAIClient {
             );
 
             request.insert_header(ACCEPT, "application/json");
-            request.insert_header(AUTHORIZATION, format!("Bearer {}", &self.auth_info.key));
+            request.insert_header("api-key", &self.auth_info.key);
             request.insert_header(USER_AGENT, "rust_example_gen_tool");
             request.insert_header(CONTENT_TYPE, "application/json");
 
