@@ -1,0 +1,11 @@
+curl -v \
+   -l "${AZURE_OPENAI_ENDPOINT}/openai/deployments/whisper-deployment/audio/transcriptions?api-version=2023-09-01-preview" \
+   -H "api-key: ${AZURE_OPENAI_KEY}" \
+   -H "Content-Type: multipart/form-data" \
+   -F "file=@./sample_files/batman.wav"
+
+curl -v \
+   -l "${AZURE_OPENAI_ENDPOINT}/openai/deployments/whisper-deployment/audio/translations?api-version=2023-09-01-preview" \
+   -H "api-key: ${AZURE_OPENAI_KEY}" \
+   -H "Content-Type: multipart/form-data" \
+   -F "file=@./sample_files/JP_it_is_rainy_today.wav"

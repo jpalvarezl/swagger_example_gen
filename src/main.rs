@@ -18,7 +18,7 @@ async fn main() -> Result<()> {
 
     let response_test = client
         .post(
-            "openai/deployments/text-embedding-ada-002/embeddings?api-version=2023-08-01-preview",
+            "openai/deployments/gpt-35-turbo/completions?api-version=2023-08-01-preview",
             serde_json::to_string(&body).expect("Serialization problem"),
         )
         .await;
