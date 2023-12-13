@@ -2,6 +2,22 @@
 
 This is (will be) a tool used to generate examples for our Azure OpenAI REST API definitions
 
+## Setup
+
+### Environment variables
+
+```bash
+AZURE_OPENAI_ENDPOINT="https://..."
+AZURE_OPENAI_KEY=...
+OPENAI_ENDPOINT="https://api.openai.com/v1"
+OPENAI_KEY=...
+```
+
+### Dependencies
+
+- `curl`
+- `jq` (optional): if you want to pretty print to console, it's nice.
+
 ## Goals
 - Not too concerned with good types. If can get away with a single request model `Prompts` for every request, that is good enough
 - We dump JSON files ready to be used in the [REST API repo](https://github.com/Azure/azure-rest-api-specs-pr/)
