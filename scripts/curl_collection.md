@@ -12,6 +12,21 @@
 
 ## Curl template
 
+Notice the authentication is different depending on whether we are using Azure or not.
+
+### Non Azure OpenAI curl preamble
+
+```bash
+curl -v -X POST "${OPENAI_ENDPOINT}/chat/completions" \
+-H "Authorization: Bearer ${OPENAI_KEY}" \
+-d '{
+   "your" : "json",
+   "goes": "here"
+}'
+```
+
+### Azure OpenAI preamble
+
 ```bash
 curl -s -X POST "${AZURE_OPENAI_ENDPOINT}/${PATH_TO_METHOD}?api-version=2023-12-01-preview" \
 -H "api-key: ${AZURE_OPENAI_KEY}" \
@@ -62,6 +77,8 @@ Add `"stream": true` at the top level of the request JSON for streaming response
 
 ## Tool calls
 
+### Azure
+
 ```bash
 curl -v -X POST "${AZURE_OPENAI_ENDPOINT}/openai/deployments/gpt-4-1106-preview/chat/completions?api-version=2023-12-01-preview" \
 -H "api-key: ${AZURE_OPENAI_KEY}" \
@@ -102,6 +119,53 @@ curl -v -X POST "${AZURE_OPENAI_ENDPOINT}/openai/deployments/gpt-4-1106-preview/
          }
          }
       ]
+   }'
+```
+
+### Non Azure
+
+```bash
+curl -v -X POST "${OPENAI_ENDPOINT}/chat/completions" \
+-H "Content-Type: application/json" \
+-H "Authorization: Bearer ${OPENAI_KEY}" \
+-d '{
+      "messages": [
+         {
+         "role": "system",
+         "content": "You are a helpful assistant."
+         },
+         {
+         "role": "user",
+         "content": "What should I wear in Honolulu next Thursday?"
+         }
+      ],
+      "stream": true,
+      "tools": [
+         {
+         "type": "function",
+         "function": {
+            "name": "FutureTemperature",
+            "parameters": {
+               "type": "object",
+               "properties": {
+               "date": {
+                  "description": "The date of the weather forecast.",
+                  "type": "string"
+               },
+               "locationName": {
+                  "description": "The name of the location to forecast the weather for.",
+                  "type": "string"
+               },
+               "unit": {
+                  "description": "The unit of measurement for the temperature.",
+                  "type": "string"
+               }
+               }
+            }
+         }
+         }
+      ],
+      "model": "gpt-3.5-turbo-1106"
    }'
 ```
 
