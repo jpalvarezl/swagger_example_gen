@@ -1,0 +1,78 @@
+### Streaming with Images
+POST {{$processEnv OPENAI_ENDPOINT}}/chat/completions
+Content-Type: application/json
+Authorization: Bearer {{$processEnv OPENAI_KEY}}
+Accept: application/json
+
+{
+   "stream": true,
+   "messages": [
+      {
+      "role": "system",
+      "content": "You are a helpful assistant that describes images"
+      },
+      {
+      "role": "user",
+      "content": [
+         {
+            "type": "text",
+            "text": "Please describe this image"
+         },
+         {
+            "type": "image_url",
+            "image_url": {
+            "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Microsoft_logo.svg/480px-Microsoft_logo.svg.png"
+            }
+         }
+      ]
+      }
+   ],
+   "max_tokens": 2048,
+   "model": "gpt-4-vision-preview"
+}
+
+### Streaming tool calls
+POST {{$processEnv OPENAI_ENDPOINT}}/chat/completions
+Content-Type: application/json
+Authorization: Bearer {{$processEnv OPENAI_KEY}}
+Accept: application/json
+
+{
+    "messages": [
+        {
+        "role": "system",
+        "content": "You are a helpful assistant."
+        },
+        {
+        "role": "user",
+        "content": "What should I wear in Honolulu next Thursday?"
+        }
+    ],
+    "stream": true,
+    "tools": [
+        {
+        "type": "function",
+        "function": {
+        "name": "FutureTemperature",
+        "parameters": {
+            "type": "object",
+            "properties": {
+            "date": {
+                "description": "The date of the weather forecast.",
+                "type": "string"
+            },
+            "locationName": {
+                "description": "The name of the location to forecast the weather for.",
+                "type": "string"
+            },
+            "unit": {
+                "description": "The unit of measurement for the temperature.",
+                "type": "string"
+            }
+            }
+        }
+        }
+        }
+    ],
+    "model": "gpt-3.5-turbo-1106"
+}
