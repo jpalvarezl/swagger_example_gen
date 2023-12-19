@@ -1,29 +1,77 @@
-POST {{$processEnv AZURE_OPENAI_ENDPOINT}}/openai/deployments/gpt-4-1106-preview/chat/completions?api-version=2023-12-01-preview
+### No streaming tool call
+POST {{$dotenv AZURE_OPENAI_ENDPOINT}}/openai/deployments/gpt-4-1106-preview/chat/completions?api-version=2023-12-01-preview
 Content-Type: application/json
-api-key: {{$processEnv AZURE_OPENAI_KEY}}
+api-key: {{$dotenv AZURE_OPENAI_KEY}}
+Accept: application/json
 
 {
     "messages": [
         {
-        "role": "system",
-        "content": "You are a helpful assistant."
+            "role": "system",
+            "content": "You are a helpful assistant."
         },
         {
-        "role": "user",
-        "content": "What should I wear in Honolulu next Thursday?"
+            "role": "user",
+            "content": "What should I wear in Honolulu next Thursday?"
         }
     ],
     "tools": [
         {
             "type": "function",
             "function": {
-            "name": "FutureTemperature",
-            "parameters": {
-                "type": "object",
-                "properties": {
-                    "date": {
-                        "description": "The date of the weather forecast.",
-                        "type": "string"
+                "name": "FutureTemperature",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "date": {
+                            "description": "The date of the weather forecast.",
+                            "type": "string"
+                        },
+                        "locationName": {
+                            "description": "The name of the location to forecast the weather for.",
+                            "type": "string"
+                        },
+                        "unit": {
+                            "description": "The unit of measurement for the temperature.",
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        }
+    ]
+}
+
+
+### Streaming tool call
+POST {{$dotenv AZURE_OPENAI_ENDPOINT}}/openai/deployments/gpt-4-1106-preview/chat/completions?api-version=2023-12-01-preview
+Content-Type: application/json
+api-key: {{$dotenv AZURE_OPENAI_KEY}}
+Accept: application/json
+
+{
+    "stream": true,
+    "messages": [
+        {
+            "role": "system",
+            "content": "You are a helpful assistant."
+        },
+        {
+            "role": "user",
+            "content": "What should I wear in Honolulu next Thursday?"
+        }
+    ],
+    "tools": [
+        {
+            "type": "function",
+            "function": {
+                "name": "FutureTemperature",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "date": {
+                            "description": "The date of the weather forecast.",
+                            "type": "string"
                         },
                         "locationName": {
                             "description": "The name of the location to forecast the weather for.",

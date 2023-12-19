@@ -1,0 +1,28 @@
+### No streaming
+POST {{$dotenv AZURE_OPENAI_ENDPOINT}}/openai/deployments/gpt-4-1106-preview/completions?api-version=2023-12-01-preview
+Content-Type: application/json
+api-key: {{$dotenv AZURE_OPENAI_KEY}}
+Accept: application/json
+
+{
+    "prompt": [
+        "Say this is a test"
+    ],
+    "max_tokens": 100,
+    "model": "text-davinci-003"
+}
+
+### streaming
+POST {{$dotenv AZURE_OPENAI_ENDPOINT}}/openai/deployments/gpt-4-1106-preview/completions?api-version=2023-12-01-preview
+Content-Type: application/json
+api-key: {{$dotenv AZURE_OPENAI_KEY}}
+Accept: application/json
+
+{
+    "prompt": [
+        "Say this is a test"
+    ],
+    "stream": true,
+    "max_tokens": 100,
+    "model": "text-davinci-003"
+}
