@@ -14,4 +14,28 @@
 
 Notice the authentication is different depending on whether we are using Azure or not.
 
-### 
+### Upload file
+
+Sending a text file, will make the `Content-Type` for the `file` segment `text/plain`
+
+```bash
+curl --trace-ascii ./traces/assistant_text_upload.trace  ${OPENAI_ENDPOINT}/files \
+-H "Authorization: Bearer ${OPENAI_KEY}" \
+-F purpose="assistants"  -F file="@sample_files/text.txt"
+```
+
+Sending an image file will make the `Content-Type` for the `file` segment `image/png`
+
+```bash
+curl --trace-ascii ./traces/assistant_image_upload.trace  ${OPENAI_ENDPOINT}/files \
+-H "Authorization: Bearer ${OPENAI_KEY}" \
+-F purpose="assistants"  -F file="@sample_files/ms_logo.png"
+```
+
+Sending an audio file will make the `Content-Type` will result in an error as it's not supported yet.
+
+```bash
+curl --trace-ascii ./traces/assistant_audio_upload.trace  ${OPENAI_ENDPOINT}/files \
+-H "Authorization: Bearer ${OPENAI_KEY}" \
+-F purpose="assistants"  -F file="@sample_files/batman.wav"
+```

@@ -1,0 +1,9 @@
+### Get Running Thread
+@threadId = "thread_ID_REPLACE_ME"
+@runId = "run_ID_REPLACE_ME"
+
+GET {{$dotenv OPENAI_ENDPOINT}}/threads/{{threadId}}/runs/{{runId}}
+Content-Type: application/json
+OpenAI-Beta: assistants=v1
+Authorization: Bearer {{$dotenv OPENAI_KEY}}
+Accept: application/json
