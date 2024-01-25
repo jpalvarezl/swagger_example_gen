@@ -1,9 +1,9 @@
-# Setup
+# OpenAI Inference
 
 ## Needed dependencies
 
 - `curl`
-- `jq`
+- `jq` (optional)
 
 ## Tips
 
