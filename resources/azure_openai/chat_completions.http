@@ -1,5 +1,8 @@
 ### No streaming tool call
-POST {{$dotenv AZURE_OPENAI_ENDPOINT}}/openai/deployments/gpt-4-1106-preview/chat/completions?api-version=2023-12-01-preview
+@deploymentName = "gpt-4-1106-preview"
+@apiVersion = "2023-12-01-preview"
+
+POST {{$dotenv AZURE_OPENAI_ENDPOINT}}/openai/deployments/{{deploymentName}}/chat/completions?api-version={{apiVersion}}
 Content-Type: application/json
 api-key: {{$dotenv AZURE_OPENAI_KEY}}
 Accept: application/json
