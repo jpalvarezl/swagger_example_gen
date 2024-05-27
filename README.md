@@ -17,6 +17,7 @@ OPENAI_KEY=...
 
 - `curl`
 - `jq` (optional): if you want to pretty print to console, it's nice.
+- To run `*.http` files, use the VSCode extension [REST Client](https://marketplace.visualstudio.com/items?itemName=humao.rest-client)
 
 ## Goals
 - Not too concerned with good types. If can get away with a single request model `Prompts` for every request, that is good enough
