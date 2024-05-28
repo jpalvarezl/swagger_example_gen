@@ -1,0 +1,83 @@
+### Create Assistant
+
+POST {{$dotenv OPENAI_ENDPOINT}}/v1/assistants
+Content-Type: application/json
+Authorization: Bearer {{$dotenv OPENAI_KEY}}
+Accept: application/json
+OpenAI-Beta: assistants=v2
+
+{
+    "model": "gpt-4-1106-preview",
+    "name": "SDK Function Tool Call Test",
+    "instructions": "You are a helpful assistant that can help fetch data from files you know about.",
+    "response_format" : "auto",
+    "tools": [
+        {
+        "type": "function",
+        "function": {
+            "name": "getAirlinePriceToDestinationForSeason",
+            "parameters": {
+            "type": "object",
+            "properties": {
+                "destination": {
+                "type": "string",
+                "description": "A travel destination location."
+                },
+                "time": {
+                "type": "string",
+                "description": "An approximate time of year at which travel is planned."
+                },
+                "airline": {
+                "type": "string",
+                "description": "The name of an airline that flights can be booked on."
+                }
+            }
+            },
+            "description": "Given a desired location, airline, and approximate time of year, retrieves estimated prices."
+        }
+        },
+        {
+        "type": "function",
+        "function": {
+            "name": "getFavoriteVacationDestination",
+            "parameters": {
+            "type": "object",
+            "properties": {}
+            },
+            "description": "Retrieves the user\u0027s unambiguously preferred location for vacations."
+        }
+        },
+        {
+        "type": "function",
+        "function": {
+            "name": "getPreferredAirlineForSeason",
+            "parameters": {
+            "type": "object",
+            "properties": {
+                "season": {
+                "type": "string",
+                "enum": [
+                    "winter",
+                    "spring",
+                    "summer",
+                    "fall"
+                ]
+                }
+            }
+            },
+            "description": "Given a season like winter or spring, retrieves the user\u0027s preferred airline carrier."
+        }
+        }
+    ]
+}
+
+
+### Delete Assistant
+
+@assistantId = changeme
+
+DELETE {{$dotenv OPENAI_ENDPOINT}}/v1/assistants/{{assistantId}}
+Content-Type: application/json
+Authorization: Bearer {{$dotenv OPENAI_KEY}}
+Accept: application/json
+OpenAI-Beta: assistants=v2
