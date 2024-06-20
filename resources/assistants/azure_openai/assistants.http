@@ -1,0 +1,40 @@
+@deploymentName = gpt-4-1106-preview
+@apiVersion = 2024-02-15-preview
+
+### Create Assistant
+
+POST {{$dotenv AZURE_OPENAI_ENDPOINT}}/openai/assistants?api-version={{apiVersion}}
+Content-Type: application/json
+api-key: {{$dotenv AZURE_OPENAI_KEY}}
+Accept: application/json
+
+{
+    "name": "Math Tutor",
+    "instructions": "When a customer asks about a specific math problem, use Python to evaluate their query.",
+    "tools": [
+        {
+            "type": "code_interpreter"
+        }
+    ],
+    "model": "{{deploymentName}}"
+
+}
+
+### Get Assistant
+@assistantId = 1
+
+GET {{$dotenv AZURE_OPENAI_ENDPOINT}}/openai/assistants/{{assistantId}}?api-version={{apiVersion}}
+api-key: {{$dotenv AZURE_OPENAI_KEY}}
+Accept: application/json
+
+### Update Assistant
+@assistantId = 1
+
+POST {{$dotenv AZURE_OPENAI_ENDPOINT}}/openai/assistants/{{assistantId}}?api-version={{apiVersion}}
+Content-Type: application/json
+api-key: {{$dotenv AZURE_OPENAI_KEY}}
+Accept: application/json
+
+{
+    "name": "Math Tutor Improved"
+}
